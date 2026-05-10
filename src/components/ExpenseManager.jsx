@@ -110,20 +110,23 @@ const ExpenseManager = ({ expenses, setExpenses }) => {
                         <button
                           className="btn btn-secondary btn-sm"
                           onClick={() => setEditingExpense({ ...expense, type })}
+                          title="Edit"
                         >
-                          Edit
+                          ✏️
                         </button>
                         <button
                           className="btn btn-secondary btn-sm"
                           onClick={() => moveExpense(expense.id, type, type === 'fixed' ? 'variable' : 'fixed')}
+                          title={`Move to ${type === 'fixed' ? 'Variable' : 'Fixed'}`}
                         >
-                          Move
+                          🔄
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => deleteExpense(expense.id, type)}
+                          title="Delete"
                         >
-                          Delete
+                          🗑️
                         </button>
                       </div>
                     </td>
