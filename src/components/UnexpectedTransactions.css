@@ -1,0 +1,127 @@
+.unexpected-transactions .transaction-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-item.income {
+  background: #d1fae5;
+  border-left: 4px solid var(--success-color);
+}
+
+.summary-item.expense {
+  background: #fee2e2;
+  border-left: 4px solid var(--danger-color);
+}
+
+.summary-item .label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.summary-item.income .value {
+  color: var(--success-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.summary-item.expense .value {
+  color: var(--danger-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  background: var(--bg-color);
+}
+
+.transaction-item.income {
+  border-left: 4px solid var(--success-color);
+}
+
+.transaction-item.expense {
+  border-left: 4px solid var(--danger-color);
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  background: var(--border-color);
+}
+
+.transaction-description {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+}
+
+.transaction-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.transaction-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.transaction-amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.transaction-amount.income {
+  color: var(--success-color);
+}
+
+.transaction-amount.expense {
+  color: var(--danger-color);
+}
+
+@media (max-width: 768px) {
+  .transaction-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .transaction-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

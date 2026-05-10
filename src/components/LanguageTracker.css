@@ -1,0 +1,70 @@
+.language-tracker .tracker-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.language-breakdown {
+  background: var(--bg-color);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.language-breakdown h3 {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.language-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.language-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border-left: 4px solid var(--info-color);
+}
+
+.language-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.language-time {
+  font-weight: bold;
+  color: var(--info-color);
+}
+
+.session-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.session-language {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.session-activity {
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  background: var(--info-color);
+  color: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .language-tracker .tracker-stats {
+    grid-template-columns: 1fr;
+  }
+}
