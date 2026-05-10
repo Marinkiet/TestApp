@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Header from './components/Header';
+import MobileNav from './components/MobileNav';
 import SummaryCards from './components/SummaryCards';
 import IncomeManager from './components/IncomeManager';
 import ExpenseManager from './components/ExpenseManager';
@@ -12,6 +13,7 @@ import ReportGenerator from './components/ReportGenerator';
 import MotivationalQuote from './components/MotivationalQuote';
 import UnexpectedTransactions from './components/UnexpectedTransactions';
 import Gamification from './components/Gamification';
+import InstallPrompt from './components/InstallPrompt';
 
 const initialExpenses = {
   fixed: [
@@ -48,6 +50,18 @@ function App() {
   const [reportsGenerated, setReportsGenerated] = useState(0);
   const [initialExpenseTotal, setInitialExpenseTotal] = useState(0);
   const [firstLoadDate, setFirstLoadDate] = useState(null);
+  const [currentSection, setCurrentSection] = useState('dashboard');
+  
+  // Refs for scrolling
+  const dashboardRef = useRef(null);
+  const incomeRef = useRef(null);
+  const expensesRef = useRef(null);
+  const goalsRef = useRef(null);
+  const ideasRef = useRef(null);
+  const fitnessRef = useRef(null);
+  const learningRef = useRef(null);
+  const achievementsRef = useRef(null);
+  const reportsRef = useRef(null);
 
   // Load data from localStorage
   useEffect(() => {
@@ -143,89 +157,130 @@ function App() {
     ? Math.floor((new Date() - new Date(firstLoadDate)) / (1000 * 60 * 60 * 24))
     : 0;
 
+  // Navigation handler
+  const handleNavigate = (sectionId) => {
+    setCurrentSection(sectionId);
+    const refs = {
+      dashboard: dashboardRef,
+      income: incomeRef,
+      expenses: expensesRef,
+      goals: goalsRef,
+      ideas: ideasRef,
+      fitness: fitnessRef,
+      learning: learningRef,
+      achievements: achievementsRef,
+      reports: reportsRef
+    };
+    
+    const ref = refs[sectionId];
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="app">
+      <InstallPrompt />
+      <MobileNav onNavigate={handleNavigate} currentSection={currentSection} />
       <Header />
       <div className="container">
-        <MotivationalQuote />
-        
-        <SummaryCards
-          totalIncome={totalIncome}
-          totalExpenses={totalExpenses}
-          netBalance={netBalance}
-          debtRemaining={debtRemaining}
-        />
+        <div ref={dashboardRef} className="section-anchor">
+          <MotivationalQuote />
+          
+          <SummaryCards
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            netBalance={netBalance}
+            debtRemaining={debtRemaining}
+          />
+        </div>
 
-        <div className="grid-2">
-          <IncomeManager
+        <div ref={incomeRef} className="section-anchor">
+          <div className="grid-2">
+            <IncomeManager
+              currentSalary={currentSalary}
+              setCurrentSalary={setCurrentSalary}
+              additionalIncome={additionalIncome}
+              setAdditionalIncome={setAdditionalIncome}
+            />
+            
+            <UnexpectedTransactions
+              transactions={unexpectedTransactions}
+              setTransactions={setUnexpectedTransactions}
+            />
+          </div>
+        </div>
+
+        <div ref={expensesRef} className="section-anchor">
+          <ExpenseManager
+            expenses={expenses}
+            setExpenses={setExpenses}
+          />
+        </div>
+
+        <div ref={ideasRef} className="section-anchor">
+          <IncomeIdeas
+            incomeIdeas={incomeIdeas}
+            setIncomeIdeas={setIncomeIdeas}
+          />
+        </div>
+
+        <div ref={goalsRef} className="section-anchor">
+          <GoalsTracker
+            debtRemaining={debtRemaining}
+            setDebtRemaining={setDebtRemaining}
+            emergencyFund={emergencyFund}
+            setEmergencyFund={setEmergencyFund}
+          />
+        </div>
+
+        <div ref={fitnessRef} className="section-anchor">
+          <div className="grid-2">
+            <GymTracker
+              gymData={gymData}
+              setGymData={setGymData}
+            />
+            
+            <div ref={learningRef}>
+              <LanguageTracker
+                languageData={languageData}
+                setLanguageData={setLanguageData}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div ref={reportsRef} className="section-anchor">
+          <ReportGenerator
             currentSalary={currentSalary}
-            setCurrentSalary={setCurrentSalary}
             additionalIncome={additionalIncome}
-            setAdditionalIncome={setAdditionalIncome}
-          />
-          
-          <UnexpectedTransactions
-            transactions={unexpectedTransactions}
-            setTransactions={setUnexpectedTransactions}
-          />
-        </div>
-
-        <ExpenseManager
-          expenses={expenses}
-          setExpenses={setExpenses}
-        />
-
-        <IncomeIdeas
-          incomeIdeas={incomeIdeas}
-          setIncomeIdeas={setIncomeIdeas}
-        />
-
-        <GoalsTracker
-          debtRemaining={debtRemaining}
-          setDebtRemaining={setDebtRemaining}
-          emergencyFund={emergencyFund}
-          setEmergencyFund={setEmergencyFund}
-        />
-
-        <div className="grid-2">
-          <GymTracker
+            expenses={expenses}
+            incomeIdeas={incomeIdeas}
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            netBalance={netBalance}
+            debtRemaining={debtRemaining}
+            emergencyFund={emergencyFund}
+            unexpectedTransactions={unexpectedTransactions}
             gymData={gymData}
-            setGymData={setGymData}
-          />
-          
-          <LanguageTracker
             languageData={languageData}
-            setLanguageData={setLanguageData}
+            onReportGenerated={() => setReportsGenerated(reportsGenerated + 1)}
           />
         </div>
 
-        <ReportGenerator
-          currentSalary={currentSalary}
-          additionalIncome={additionalIncome}
-          expenses={expenses}
-          incomeIdeas={incomeIdeas}
-          totalIncome={totalIncome}
-          totalExpenses={totalExpenses}
-          netBalance={netBalance}
-          debtRemaining={debtRemaining}
-          emergencyFund={emergencyFund}
-          unexpectedTransactions={unexpectedTransactions}
-          gymData={gymData}
-          languageData={languageData}
-          onReportGenerated={() => setReportsGenerated(reportsGenerated + 1)}
-        />
-
-        <Gamification
-          debtPaid={debtPaid}
-          emergencyFund={emergencyFund}
-          incomeGenerated={incomeGenerated}
-          expenseReduction={expenseReduction}
-          gymSessions={monthGymSessions}
-          languageSessions={monthLanguageSessions}
-          reportsGenerated={reportsGenerated}
-          netBalance={netBalance}
-          daysTracking={daysTracking}
-        />
+        <div ref={achievementsRef} className="section-anchor">
+          <Gamification
+            debtPaid={debtPaid}
+            emergencyFund={emergencyFund}
+            incomeGenerated={incomeGenerated}
+            expenseReduction={expenseReduction}
+            gymSessions={monthGymSessions}
+            languageSessions={monthLanguageSessions}
+            reportsGenerated={reportsGenerated}
+            netBalance={netBalance}
+            daysTracking={daysTracking}
+          />
+        </div>
       </div>
     </div>
   );

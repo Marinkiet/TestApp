@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -24,10 +25,45 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px; /* Prevents zoom on input focus */
+  }
+  
+  /* Prevent pull-to-refresh on iOS */
+  body {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Touch-friendly buttons */
+button, .btn, input[type="submit"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on buttons */
+button, .btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 /* Scrollbar Styling */
@@ -118,4 +154,21 @@ body {
 
 .bg-info {
   background-color: var(--info-color);
+}
+
+/* PWA-specific styles */
+@media (display-mode: standalone) {
+  /* Styles when app is installed as PWA */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* iOS safe area support */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
 }

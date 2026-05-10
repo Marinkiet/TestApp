@@ -6,9 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:vercel": "npm run build && vercel --prod",
+    "deploy:netlify": "npm run build && netlify deploy --prod"
   },
-  "keywords": ["finance", "dashboard", "react", "budget", "expense-tracker"],
+  "keywords": [
+    "finance",
+    "dashboard",
+    "react",
+    "budget",
+    "expense-tracker"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -20,5 +28,9 @@
     "react-dom": "^19.2.6",
     "recharts": "^3.8.1",
     "vite": "^8.0.11"
+  },
+  "devDependencies": {
+    "vite-plugin-pwa": "^1.3.0",
+    "workbox-window": "^7.4.1"
   }
 }

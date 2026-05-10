@@ -1,0 +1,137 @@
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 9999;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-prompt-content {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.install-prompt-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.install-prompt-close:hover {
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.install-prompt-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.install-prompt-content h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.install-instructions {
+  color: var(--text-secondary);
+}
+
+.install-instructions p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.install-instructions ol,
+.install-instructions ul {
+  margin: 15px 0;
+  padding-left: 25px;
+}
+
+.install-instructions li {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.install-instructions ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.install-instructions ul li {
+  padding-left: 0;
+}
+
+.ios-icon {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.install-note {
+  background: #f0f9ff;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.install-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.install-actions .btn {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .install-prompt {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .install-prompt-content {
+    padding: 20px;
+  }
+
+  .install-actions {
+    flex-direction: column;
+  }
+}
