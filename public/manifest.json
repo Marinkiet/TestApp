@@ -1,6 +1,6 @@
 {
   "name": "Personal Finance Dashboard",
-  "short_name": "Finance Tracker",
+  "short_name": "Finance",
   "description": "Track your finances, build wealth, and level up your life!",
   "theme_color": "#667eea",
   "background_color": "#ffffff",
@@ -8,22 +8,33 @@
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
+  "id": "/",
+  "categories": ["finance", "productivity", "lifestyle"],
   "icons": [
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwa-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

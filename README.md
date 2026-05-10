@@ -16,6 +16,29 @@ Transform your financial journey into an exciting game:
 
 ## 🚀 Quick Start
 
+### 📱 PWA Installation Not Working?
+
+**If you can't install the app on your phone, follow these 3 steps:**
+
+1. **Generate Icons** (2 min)
+   - Open `generate-icons.html` in your browser
+   - Download all 5 icons
+   - Save to `public/` folder
+
+2. **Deploy** (2 min)
+   ```bash
+   npm run build
+   vercel --prod  # or your hosting
+   ```
+
+3. **Install on Phone** (1 min)
+   - Android: Chrome → Menu → "Install app"
+   - iOS: Safari → Share → "Add to Home Screen"
+
+**📖 Detailed guide:** See `START_HERE.md`
+
+---
+
 ```bash
 # Install dependencies
 npm install

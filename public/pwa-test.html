@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Status Check</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .check-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .check-item.pass {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .check-item.fail {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .check-item.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .icon {
+            font-size: 24px;
+            min-width: 30px;
+            text-align: center;
+        }
+        .check-content {
+            flex: 1;
+        }
+        .check-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .check-detail {
+            font-size: 14px;
+            color: #666;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .icon-preview {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .icon-item {
+            text-align: center;
+        }
+        .icon-item img {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .icon-item.missing img {
+            opacity: 0.3;
+        }
+        .summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .summary-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .summary-text {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 PWA Status Check</h1>
+        <p class="subtitle">Verify your Progressive Web App configuration</p>
+
+        <div class="summary" id="summary">
+            <div class="summary-score" id="score">-</div>
+            <div class="summary-text" id="scoreText">Checking...</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📋 Requirements</div>
+            <div id="requirements"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎨 Icons</div>
+            <div id="icons"></div>
+            <div class="icon-preview" id="iconPreview"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">⚙️ Configuration</div>
+            <div id="config"></div>
+        </div>
+
+        <div class="section">
+            <button onclick="location.reload()">🔄 Refresh Check</button>
+            <button onclick="window.open('/', '_blank')">🏠 Open App</button>
+            <button onclick="window.open('../generate-icons.html', '_blank')">🎨 Generate Icons</button>
+        </div>
+    </div>
+
+    <script>
+        const checks = {
+            requirements: [],
+            icons: [],
+            config: []
+        };
+
+        async function checkPWA() {
+            // Check HTTPS
+            const isSecure = location.protocol === 'https:' || location.hostname === 'localhost';
+            checks.requirements.push({
+                pass: isSecure,
+                title: 'HTTPS Connection',
+                detail: isSecure ? 'Site is served over HTTPS ✓' : 'PWA requires HTTPS (or localhost)'
+            });
+
+            // Check Service Worker
+            const hasSW = 'serviceWorker' in navigator;
+            checks.requirements.push({
+                pass: hasSW,
+                title: 'Service Worker Support',
+                detail: hasSW ? 'Browser supports service workers ✓' : 'Browser does not support service workers'
+            });
+
+            // Check if SW is registered
+            if (hasSW) {
+                const registration = await navigator.serviceWorker.getRegistration();
+                checks.requirements.push({
+                    pass: !!registration,
+                    title: 'Service Worker Registered',
+                    detail: registration ? 'Service worker is active ✓' : 'Service worker not registered yet'
+                });
+            }
+
+            // Check Manifest
+            const manifestLink = document.querySelector('link[rel="manifest"]');
+            checks.config.push({
+                pass: !!manifestLink,
+                title: 'Manifest Link',
+                detail: manifestLink ? `Found: ${manifestLink.href}` : 'No manifest link in HTML'
+            });
+
+            // Fetch and check manifest
+            if (manifestLink) {
+                try {
+                    const response = await fetch(manifestLink.href);
+                    const manifest = await response.json();
+                    
+                    checks.config.push({
+                        pass: !!manifest.name,
+                        title: 'Manifest Name',
+                        detail: manifest.name || 'Missing'
+                    });
+
+                    checks.config.push({
+                        pass: !!manifest.short_name,
+                        title: 'Manifest Short Name',
+                        detail: manifest.short_name || 'Missing'
+                    });
+
+                    checks.config.push({
+                        pass: manifest.display === 'standalone',
+                        title: 'Display Mode',
+                        detail: manifest.display || 'Not set'
+                    });
+
+                    checks.config.push({
+                        pass: !!manifest.start_url,
+                        title: 'Start URL',
+                        detail: manifest.start_url || 'Missing'
+                    });
+
+                    checks.config.push({
+                        pass: !!manifest.theme_color,
+                        title: 'Theme Color',
+                        detail: manifest.theme_color || 'Missing'
+                    });
+
+                    // Check icons in manifest
+                    if (manifest.icons && manifest.icons.length > 0) {
+                        checks.config.push({
+                            pass: true,
+                            title: 'Icons in Manifest',
+                            detail: `${manifest.icons.length} icons defined`
+                        });
+
+                        // Check each icon
+                        for (const icon of manifest.icons) {
+                            await checkIcon(icon.src, icon.sizes);
+                        }
+                    } else {
+                        checks.config.push({
+                            pass: false,
+                            title: 'Icons in Manifest',
+                            detail: 'No icons defined'
+                        });
+                    }
+                } catch (error) {
+                    checks.config.push({
+                        pass: false,
+                        title: 'Manifest File',
+                        detail: `Error loading manifest: ${error.message}`
+                    });
+                }
+            }
+
+            // Check specific icon files
+            await checkIcon('/pwa-192x192.png', '192x192');
+            await checkIcon('/pwa-512x512.png', '512x512');
+            await checkIcon('/apple-touch-icon.png', '180x180');
+            await checkIcon('/favicon-32x32.png', '32x32');
+
+            renderResults();
+        }
+
+        async function checkIcon(src, size) {
+            try {
+                const response = await fetch(src);
+                const exists = response.ok;
+                
+                checks.icons.push({
+                    pass: exists,
+                    title: src.split('/').pop(),
+                    detail: exists ? `${size} - Found ✓` : `${size} - Missing`,
+                    src: exists ? src : null,
+                    size: size
+                });
+            } catch (error) {
+                checks.icons.push({
+                    pass: false,
+                    title: src.split('/').pop(),
+                    detail: `${size} - Error checking`,
+                    src: null,
+                    size: size
+                });
+            }
+        }
+
+        function renderResults() {
+            // Render requirements
+            const reqDiv = document.getElementById('requirements');
+            reqDiv.innerHTML = checks.requirements.map(check => `
+                <div class="check-item ${check.pass ? 'pass' : 'fail'}">
+                    <div class="icon">${check.pass ? '✅' : '❌'}</div>
+                    <div class="check-content">
+                        <div class="check-title">${check.title}</div>
+                        <div class="check-detail">${check.detail}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render icons
+            const iconDiv = document.getElementById('icons');
+            iconDiv.innerHTML = checks.icons.map(check => `
+                <div class="check-item ${check.pass ? 'pass' : 'fail'}">
+                    <div class="icon">${check.pass ? '✅' : '❌'}</div>
+                    <div class="check-content">
+                        <div class="check-title">${check.title}</div>
+                        <div class="check-detail">${check.detail}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render icon preview
+            const previewDiv = document.getElementById('iconPreview');
+            previewDiv.innerHTML = checks.icons
+                .filter(check => check.src)
+                .map(check => {
+                    const displaySize = Math.min(parseInt(check.size), 128);
+                    return `
+                        <div class="icon-item ${check.pass ? '' : 'missing'}">
+                            <img src="${check.src}" width="${displaySize}" height="${displaySize}" alt="${check.title}">
+                            <div style="font-size: 12px; color: #666;">${check.size}</div>
+                        </div>
+                    `;
+                }).join('');
+
+            // Render config
+            const configDiv = document.getElementById('config');
+            configDiv.innerHTML = checks.config.map(check => `
+                <div class="check-item ${check.pass ? 'pass' : check.pass === null ? 'warning' : 'fail'}">
+                    <div class="icon">${check.pass ? '✅' : check.pass === null ? '⚠️' : '❌'}</div>
+                    <div class="check-content">
+                        <div class="check-title">${check.title}</div>
+                        <div class="check-detail">${check.detail}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculate score
+            const allChecks = [...checks.requirements, ...checks.icons, ...checks.config];
+            const passedChecks = allChecks.filter(c => c.pass).length;
+            const totalChecks = allChecks.length;
+            const score = Math.round((passedChecks / totalChecks) * 100);
+
+            document.getElementById('score').textContent = `${score}%`;
+            
+            let scoreText = '';
+            if (score === 100) {
+                scoreText = '🎉 Perfect! Your PWA is ready to install!';
+            } else if (score >= 80) {
+                scoreText = '👍 Good! A few minor issues to fix.';
+            } else if (score >= 60) {
+                scoreText = '⚠️ Needs work. Check failed items above.';
+            } else {
+                scoreText = '❌ Not ready. Generate icons and rebuild.';
+            }
+            
+            document.getElementById('scoreText').textContent = scoreText;
+        }
+
+        // Run checks on load
+        checkPWA();
+    </script>
+</body>
+</html>
