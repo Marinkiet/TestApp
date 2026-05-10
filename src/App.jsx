@@ -186,16 +186,9 @@ function App() {
       <MobileNav onNavigate={handleNavigate} currentSection={currentSection} />
       <Header />
       <div className="container">
-        {/* Dashboard Section */}
+        {/* Dashboard Section - Quote only */}
         <div ref={dashboardRef} className="section-anchor">
           <MotivationalQuote />
-          
-          <SummaryCards
-            totalIncome={totalIncome}
-            totalExpenses={totalExpenses}
-            netBalance={netBalance}
-            debtRemaining={debtRemaining}
-          />
         </div>
 
         {/* Transactions Section - Unexpected transactions first */}
@@ -203,16 +196,6 @@ function App() {
           <UnexpectedTransactions
             transactions={unexpectedTransactions}
             setTransactions={setUnexpectedTransactions}
-          />
-        </div>
-
-        {/* Income Section - Separate page */}
-        <div ref={incomeRef} className="section-anchor">
-          <IncomeManager
-            currentSalary={currentSalary}
-            setCurrentSalary={setCurrentSalary}
-            additionalIncome={additionalIncome}
-            setAdditionalIncome={setAdditionalIncome}
           />
         </div>
 
@@ -289,6 +272,26 @@ function App() {
             reportsGenerated={reportsGenerated}
             netBalance={netBalance}
             daysTracking={daysTracking}
+          />
+        </div>
+
+        {/* Summary Cards - Moved to bottom */}
+        <div className="section-anchor">
+          <SummaryCards
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            netBalance={netBalance}
+            debtRemaining={debtRemaining}
+          />
+        </div>
+
+        {/* Income Section - Moved to bottom */}
+        <div ref={incomeRef} className="section-anchor">
+          <IncomeManager
+            currentSalary={currentSalary}
+            setCurrentSalary={setCurrentSalary}
+            additionalIncome={additionalIncome}
+            setAdditionalIncome={setAdditionalIncome}
           />
         </div>
       </div>
