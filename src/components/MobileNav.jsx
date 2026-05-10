@@ -6,6 +6,7 @@ const MobileNav = ({ onNavigate, currentSection }) => {
 
   const menuItems = [
     { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+    { id: 'transactions', icon: '⚡', label: 'Transactions' },
     { id: 'income', icon: '💰', label: 'Income' },
     { id: 'expenses', icon: '💳', label: 'Expenses' },
     { id: 'goals', icon: '🎯', label: 'Goals' },

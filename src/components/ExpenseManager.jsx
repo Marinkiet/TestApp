@@ -84,52 +84,54 @@ const ExpenseManager = ({ expenses, setExpenses }) => {
         </div>
         
         {expenseList.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expenseList.map(expense => (
-                <tr key={expense.id}>
-                  <td>
-                    <div className="expense-name">{expense.name}</div>
-                    {expense.note && <div className="expense-note">{expense.note}</div>}
-                  </td>
-                  <td>
-                    <span className="badge badge-info">{expense.category}</span>
-                  </td>
-                  <td className="expense-amount">R {expense.amount.toLocaleString()}</td>
-                  <td>
-                    <div className="action-buttons">
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => setEditingExpense({ ...expense, type })}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => moveExpense(expense.id, type, type === 'fixed' ? 'variable' : 'fixed')}
-                      >
-                        Move to {type === 'fixed' ? 'Variable' : 'Fixed'}
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => deleteExpense(expense.id, type)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+          <div className="table-wrapper">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {expenseList.map(expense => (
+                  <tr key={expense.id}>
+                    <td>
+                      <div className="expense-name">{expense.name}</div>
+                      {expense.note && <div className="expense-note">{expense.note}</div>}
+                    </td>
+                    <td>
+                      <span className="badge badge-info">{expense.category}</span>
+                    </td>
+                    <td className="expense-amount">R {expense.amount.toLocaleString()}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => setEditingExpense({ ...expense, type })}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => moveExpense(expense.id, type, type === 'fixed' ? 'variable' : 'fixed')}
+                        >
+                          Move
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => deleteExpense(expense.id, type)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="empty-state">
             <p>No {title.toLowerCase()} yet</p>

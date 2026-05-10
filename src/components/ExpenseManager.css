@@ -1,5 +1,6 @@
 .expense-manager .expense-section {
   margin-bottom: 30px;
+  overflow-x: hidden;
 }
 
 .expense-header {
@@ -9,6 +10,8 @@
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .expense-total {
@@ -17,20 +20,29 @@
   color: var(--primary-color);
 }
 
+@media (max-width: 768px) {
+  .expense-total {
+    font-size: 1rem;
+  }
+}
+
 .expense-name {
   font-weight: 600;
   color: var(--text-primary);
+  word-break: break-word;
 }
 
 .expense-note {
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-top: 4px;
+  word-break: break-word;
 }
 
 .expense-amount {
   font-weight: 600;
   color: var(--danger-color);
+  white-space: nowrap;
 }
 
 .action-buttons {
@@ -49,18 +61,26 @@
   .action-buttons {
     flex-direction: column;
     width: 100%;
+    gap: 5px;
   }
 
   .action-buttons .btn {
     width: 100%;
+    justify-content: center;
   }
 
+  /* Make table scrollable on mobile */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   .table {
-    font-size: 0.85rem;
+    min-width: 600px;
   }
-
-  .table th,
-  .table td {
-    padding: 8px;
+  
+  .table th:last-child,
+  .table td:last-child {
+    min-width: 200px;
   }
 }

@@ -54,6 +54,7 @@ function App() {
   
   // Refs for scrolling
   const dashboardRef = useRef(null);
+  const transactionsRef = useRef(null);
   const incomeRef = useRef(null);
   const expensesRef = useRef(null);
   const goalsRef = useRef(null);
@@ -162,6 +163,7 @@ function App() {
     setCurrentSection(sectionId);
     const refs = {
       dashboard: dashboardRef,
+      transactions: transactionsRef,
       income: incomeRef,
       expenses: expensesRef,
       goals: goalsRef,
@@ -184,6 +186,7 @@ function App() {
       <MobileNav onNavigate={handleNavigate} currentSection={currentSection} />
       <Header />
       <div className="container">
+        {/* Dashboard Section */}
         <div ref={dashboardRef} className="section-anchor">
           <MotivationalQuote />
           
@@ -195,22 +198,25 @@ function App() {
           />
         </div>
 
-        <div ref={incomeRef} className="section-anchor">
-          <div className="grid-2">
-            <IncomeManager
-              currentSalary={currentSalary}
-              setCurrentSalary={setCurrentSalary}
-              additionalIncome={additionalIncome}
-              setAdditionalIncome={setAdditionalIncome}
-            />
-            
-            <UnexpectedTransactions
-              transactions={unexpectedTransactions}
-              setTransactions={setUnexpectedTransactions}
-            />
-          </div>
+        {/* Transactions Section - Unexpected transactions first */}
+        <div ref={transactionsRef} className="section-anchor">
+          <UnexpectedTransactions
+            transactions={unexpectedTransactions}
+            setTransactions={setUnexpectedTransactions}
+          />
         </div>
 
+        {/* Income Section - Separate page */}
+        <div ref={incomeRef} className="section-anchor">
+          <IncomeManager
+            currentSalary={currentSalary}
+            setCurrentSalary={setCurrentSalary}
+            additionalIncome={additionalIncome}
+            setAdditionalIncome={setAdditionalIncome}
+          />
+        </div>
+
+        {/* Expenses Section */}
         <div ref={expensesRef} className="section-anchor">
           <ExpenseManager
             expenses={expenses}
@@ -218,6 +224,7 @@ function App() {
           />
         </div>
 
+        {/* Income Ideas Section */}
         <div ref={ideasRef} className="section-anchor">
           <IncomeIdeas
             incomeIdeas={incomeIdeas}
@@ -225,6 +232,7 @@ function App() {
           />
         </div>
 
+        {/* Goals Section */}
         <div ref={goalsRef} className="section-anchor">
           <GoalsTracker
             debtRemaining={debtRemaining}
@@ -234,22 +242,23 @@ function App() {
           />
         </div>
 
+        {/* Fitness Section */}
         <div ref={fitnessRef} className="section-anchor">
-          <div className="grid-2">
-            <GymTracker
-              gymData={gymData}
-              setGymData={setGymData}
-            />
-            
-            <div ref={learningRef}>
-              <LanguageTracker
-                languageData={languageData}
-                setLanguageData={setLanguageData}
-              />
-            </div>
-          </div>
+          <GymTracker
+            gymData={gymData}
+            setGymData={setGymData}
+          />
         </div>
 
+        {/* Learning Section */}
+        <div ref={learningRef} className="section-anchor">
+          <LanguageTracker
+            languageData={languageData}
+            setLanguageData={setLanguageData}
+          />
+        </div>
+
+        {/* Reports Section */}
         <div ref={reportsRef} className="section-anchor">
           <ReportGenerator
             currentSalary={currentSalary}
@@ -268,6 +277,7 @@ function App() {
           />
         </div>
 
+        {/* Achievements Section */}
         <div ref={achievementsRef} className="section-anchor">
           <Gamification
             debtPaid={debtPaid}
